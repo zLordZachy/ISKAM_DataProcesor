@@ -41,7 +41,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Width="2*" Header="Datum" Binding="{Binding Datum, StringFormat='{}{0:dd/MM/yyyy}'}"/>
                 <DataGridTextColumn Width="*" Header="Cas" Binding="{Binding Cas, StringFormat='{}{0:H:mm}'}" />
-                <DataGridTextColumn Width="2*" Header="Zuctovano" Binding="{Binding Zuctovano}"/>
+                <DataGridTextColumn Width="*" Header="Zuctovano" Binding="{Binding Zuctovano}"/>
                 <DataGridTextColumn Width="5*" Header="Popis" Binding="{Binding Popis}"/>
                 <DataGridTextColumn Width="*" Header="Cena" Binding="{Binding Cena}"/>
                 <DataGridTextColumn Width="*" Header="Druh" Binding="{Binding Druh}"/> 
@@ -66,8 +66,8 @@
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
             </GroupBox>
-                <GroupBox Margin="5" BorderBrush="Black" Grid.Row="0" Grid.Column="1" Header="Počet Jídel v jednotlivých letech" VerticalAlignment="Stretch">
-                    <lvc:CartesianChart Series="{Binding GrafLine.SeriesCollection}" LegendLocation="Right" >
+            <GroupBox Margin="5" BorderBrush="Black" Grid.Row="0" Grid.Column="1" Header="Počet jednotlivých druhů jídel v letech" VerticalAlignment="Stretch">
+                <lvc:CartesianChart Series="{Binding GrafLine.SeriesCollection}" LegendLocation="Right" >
                     <lvc:CartesianChart.AxisY>
                             <lvc:Axis Title="Počet jídel" LabelFormatter="{Binding GrafLine.YFormatter}"></lvc:Axis>
                     </lvc:CartesianChart.AxisY>
@@ -80,26 +80,49 @@
                     <GroupItem>
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Nejčastější polévka: "/>
-                                <Label Content="{Binding NejPolevka}"/>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Nejčastější hlavní chod: "/>
-                                <Label Content="{Binding NejHlavniJidlo}"/>
+                                <Label Content="Nejčastější polévka / zákusek: " FontSize="15"  />
+                                <Label Content="{Binding NejPolevka}" FontSize="15" FontWeight="Bold"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Nejčastější salát: "/>
-                                <Label Content="{Binding NejSalat}"/>
+                                <Label Content="Nejčastější hlavní chod: " FontSize="15" />
+                                <Label Content="{Binding NejHlavniJidlo}" FontSize="15" FontWeight="Bold" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Nejčastější předkrm: " FontSize="15" />
+                                <Label Content="{Binding NejSalat}" FontSize="15" FontWeight="Bold" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Celkový počet polévka / zákuseků: " FontSize="15" />
+                                <Label Content="{Binding PocetPolevek}" FontSize="15" FontWeight="Bold" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Celkový počet hlavních chodů: " FontSize="15" />
+                                <Label Content="{Binding PocetHlavnichChodu}" FontSize="15" FontWeight="Bold" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Celkový počet předkrmů " FontSize="15" />
+                                <Label Content="{Binding PocetSalatu}" FontSize="15" FontWeight="Bold" />
                             </StackPanel>
                         </StackPanel>
                     </GroupItem>
-                    
-                  
                 </GroupBox>
-            <GroupItem Grid.Row="1" Grid.Column="1">
-                    <Button Content="Napln" Command="{Binding ButtonClickCommand}"></Button>
-                </GroupItem>
+                <GroupBox Margin="5" Grid.Row="1" Grid.Column="1" BorderBrush="Black" Header="Tabulka počtů obědů">
+                    <StackPanel>
+                        <DataGrid Margin="10" Grid.Row="0" x:Name="TabulkaObedu" Grid.Column="0" AutoGenerateColumns="False" SelectionUnit="FullRow" 
+                              SelectionMode="Extended" CanUserAddRows="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding OcisteneObedy}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*" Header="Mesic" Binding="{Binding Mesic}"/>
+                                <DataGridTextColumn Width="*" Header="Pocet dní měsíce" Binding="{Binding PocetDni}" />
+                                <DataGridTextColumn Width="*" Header="Počet obědů" Binding="{Binding PocetObedu}"/>
+                                <DataGridTextColumn Width="*" Header="Popis očistěných obědů" Binding="{Binding PocetOcistenychObedu}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <GroupItem  >
+                            <Button Content="Napln" Command="{Binding ButtonClickCommand}"></Button>
+                        </GroupItem>
+                    </StackPanel>
+                </GroupBox>
             </Grid>
         </Grid>
     </Grid>

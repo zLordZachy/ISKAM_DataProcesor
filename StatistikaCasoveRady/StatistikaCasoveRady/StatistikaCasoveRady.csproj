@@ -66,6 +66,7 @@
     <Compile Include="Bussines\FileManager.cs" />
     <Compile Include="Bussines\IFileManager.cs" />
     <Compile Include="Command\ZCommand.cs" />
+    <Compile Include="DTO\OcisteneObedy.cs" />
     <Compile Include="DTO\Obed.cs" />
     <Compile Include="Graphs\GraphsBasicLineChart.cs" />
     <Compile Include="Services\IObedService.cs" />

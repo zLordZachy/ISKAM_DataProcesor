@@ -9,12 +9,14 @@ using System;
 using LiveCharts.Wpf;
 using StatistikaCasoveRady.Graphs;
 using System.ComponentModel;
+using StatistikaCasoveRady.DTO;
 
 namespace StatistikaCasoveRady.ViewModel
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Obed> Obedy { get; set; }
+        public ObservableCollection<OcisteneObedy> OcisteneObedy { get; set; }
 
         public string GraphHaderA
         {
@@ -46,6 +48,31 @@ namespace StatistikaCasoveRady.ViewModel
             {
                 _nejSalat = value;
                 OnPropertyChanged("NejSalat");
+            }
+        }
+
+        public long PocetPolevek
+        {
+            get => _pocetPolevek; set
+            {
+                _pocetPolevek = value;
+                OnPropertyChanged("PocetPolevek");
+            }
+        }
+        public long PocetHlavnichChodu
+        {
+            get => _pocetHlavnichChodu; set
+            {
+                _pocetHlavnichChodu = value;
+                OnPropertyChanged("PocetHlavnichChodu");
+            }
+        }
+        public long PocetSalatu
+        {
+            get => _pocetSalatu; set
+            {
+                _pocetSalatu = value;
+                OnPropertyChanged("PocetSalatu");
             }
         }
 
@@ -112,6 +139,7 @@ namespace StatistikaCasoveRady.ViewModel
         {
             _obedService = new ObedService();
             Obedy = new ObservableCollection<Obed>();
+            OcisteneObedy = new ObservableCollection<DTO.OcisteneObedy>();
             NacistValstniDataCommand = new ZCommand(CanNacistVlastniData, NacistVlastniData);
             NacistDefaultniDataCommand = new ZCommand(CanNacistDefaultniData, NacistDefaultniData);
             ButtonClickCommand = new ZCommand(CanOpenWindow, OpenWindow);
@@ -299,6 +327,18 @@ namespace StatistikaCasoveRady.ViewModel
             NejHlavniJidlo = ObedyList.GroupBy(item => item.Popis).OrderByDescending(g => g.Count(x => x.Druh == "HlavniJidlo")).Select(g => g.Key).First();
             NejSalat = ObedyList.GroupBy(item => item.Popis).OrderByDescending(g => g.Count(x => x.Druh == "Salat")).Select(g => g.Key).First();
             GraphHaderA = $"Graf odběrů jídel v jednotlivých měsících od: {ObedyList.OrderBy(x => x.Datum).First().Datum.ToShortDateString()} do {ObedyList.OrderByDescending(x => x.Datum).First().Datum.ToShortDateString()}";
+            PocetPolevek = ObedyList.Where(x => x.Druh == "Polevka").ToList().Count;
+            PocetHlavnichChodu = ObedyList.Where(x => x.Druh == "HlavniJidlo").ToList().Count;
+            PocetSalatu = ObedyList.Where(x => x.Druh == "Salat").ToList().Count;
+
+            OcisteneObedy.Clear();
+            for (int i = 1; i < 13; i++)
+            {
+                OcisteneObedy o = new DTO.OcisteneObedy(i, DateTime.DaysInMonth(2000, i), ObedyList.Where(x => x.Datum.Month == i).ToList().Count);
+
+                OcisteneObedy.Add(o);
+            }
+
         }
 
         private readonly IObedService _obedService;
@@ -311,5 +351,8 @@ namespace StatistikaCasoveRady.ViewModel
         private string _nejHlavniJidlo;
         private string _nejSalat;
         private string _graphHaderA;
+        private long _pocetPolevek;
+        private long _pocetHlavnichChodu;
+        private long _pocetSalatu;
     }
 }
