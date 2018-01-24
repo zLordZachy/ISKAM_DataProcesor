@@ -43,7 +43,7 @@ namespace StatistikaCasoveRady.Bussines
                         Obed o = new Obed();
                         DateTime.TryParse( radek[0],out DateTime vlozeno);
                         DateTime.TryParse(radek[1], out DateTime cas);
-                        o.Vlozeno = vlozeno;
+                        o.Datum = vlozeno;
                         o.Cas = cas;
                         DateTime.TryParse(radek[2], out DateTime zuctovano);
                         o.Zuctovano = zuctovano;

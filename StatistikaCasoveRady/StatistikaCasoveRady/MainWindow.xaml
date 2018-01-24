@@ -5,6 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StatistikaCasoveRady"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="720">
-    <Grid/>
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Title="MainWindow" Height="{x:Static SystemParameters.PrimaryScreenHeight}" Width="{x:Static SystemParameters.PrimaryScreenWidth}">
+    <Grid>
+            
+    </Grid>
 </Window>
