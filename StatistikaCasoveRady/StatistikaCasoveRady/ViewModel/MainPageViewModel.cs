@@ -15,6 +15,15 @@ namespace StatistikaCasoveRady.ViewModel
     public class MainPageViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Obed> Obedy { get; set; }
+
+        public string GraphHaderA
+        {
+            get => _graphHaderA; set
+            {
+                _graphHaderA = value;
+                OnPropertyChanged("GraphHaderA");
+            }
+        }
         public String NejPolevka
         {
             get => _nejPolevka; set
@@ -110,7 +119,7 @@ namespace StatistikaCasoveRady.ViewModel
             {
                 LoadObedy();
                 LoadGraphs();
-                GetNejcastejsiJidla();
+                ActualizeInfoFiles();
             }
             catch (Exception)
             {
@@ -122,7 +131,7 @@ namespace StatistikaCasoveRady.ViewModel
         {
             LoadObedy();
             LoadGraphs();
-            GetNejcastejsiJidla();
+            ActualizeInfoFiles();
         }
 
         private bool CanNacistDefaultniData(object obj)
@@ -151,9 +160,9 @@ namespace StatistikaCasoveRady.ViewModel
                         Obedy.Add(obed);
                     }
                 }
-                ObedyList.Clear();
+                ObedyList = new List<Obed>(Obedy);
                 LoadGraphs();
-                GetNejcastejsiJidla();
+                ActualizeInfoFiles();
             }
         }
 
@@ -200,7 +209,7 @@ namespace StatistikaCasoveRady.ViewModel
             {
                 new ColumnSeries
                 {
-                    Title = "Dostupné roky",
+                    Title = "Počet jídel",
                     Values = PocetVsechObeduVMesici
                 }
             };
@@ -284,11 +293,12 @@ namespace StatistikaCasoveRady.ViewModel
             return null;
         }
 
-        private void GetNejcastejsiJidla()
+        private void ActualizeInfoFiles()
         {
             NejPolevka = ObedyList.GroupBy(item => item.Popis).OrderByDescending(g => g.Count(x => x.Druh == "Polevka")).Select(g => g.Key).First();
             NejHlavniJidlo = ObedyList.GroupBy(item => item.Popis).OrderByDescending(g => g.Count(x => x.Druh == "HlavniJidlo")).Select(g => g.Key).First();
             NejSalat = ObedyList.GroupBy(item => item.Popis).OrderByDescending(g => g.Count(x => x.Druh == "Salat")).Select(g => g.Key).First();
+            GraphHaderA = $"Graf odběrů jídel v jednotlivých měsících od: {ObedyList.OrderBy(x => x.Datum).First().Datum.ToShortDateString()} do {ObedyList.OrderByDescending(x => x.Datum).First().Datum.ToShortDateString()}";
         }
 
         private readonly IObedService _obedService;
@@ -300,5 +310,6 @@ namespace StatistikaCasoveRady.ViewModel
         private string _nejPolevka;
         private string _nejHlavniJidlo;
         private string _nejSalat;
+        private string _graphHaderA;
     }
 }

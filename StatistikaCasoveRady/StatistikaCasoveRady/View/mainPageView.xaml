@@ -56,7 +56,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-                <GroupBox Margin="5" BorderBrush="Black" Grid.Row="0" Grid.Column="0" Header="Počet Jídel v měsíci za období od 1.1 2014 - do 31.12.2017" VerticalAlignment="Stretch">
+                <GroupBox Margin="5" BorderBrush="Black" Grid.Row="0" Grid.Column="0" Header="{Binding GraphHaderA}" VerticalAlignment="Stretch">
                 <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left">
                 <lvc:CartesianChart.AxisX>
                             <lvc:Axis Title="Měsíce" Labels="{Binding Labels}"></lvc:Axis>
