@@ -9,13 +9,37 @@ using System;
 using LiveCharts.Wpf;
 using StatistikaCasoveRady.Graphs;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace StatistikaCasoveRady.ViewModel
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Obed> Obedy { get; set; }
+        public String NejPolevka
+        {
+            get => _nejPolevka; set
+            {
+                _nejPolevka = value;
+                OnPropertyChanged("NejPolevka");
+            }
+        }
+        public String NejHlavniJidlo
+        {
+            get => _nejHlavniJidlo; set
+            {
+                _nejHlavniJidlo = value;
+                OnPropertyChanged("NejHlavniJidlo");
+            }
+        }
+        public String NejSalat
+        {
+            get => _nejSalat; set
+            {
+                _nejSalat = value;
+                OnPropertyChanged("NejSalat");
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -82,14 +106,23 @@ namespace StatistikaCasoveRady.ViewModel
             NacistValstniDataCommand = new ZCommand(CanNacistVlastniData, NacistVlastniData);
             NacistDefaultniDataCommand = new ZCommand(CanNacistDefaultniData, NacistDefaultniData);
             ButtonClickCommand = new ZCommand(CanOpenWindow, OpenWindow);
-            LoadObedy();
-            LoadGraphs();
+            try
+            {
+                LoadObedy();
+                LoadGraphs();
+                GetNejcastejsiJidla();
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void NacistDefaultniData(object obj)
         {
             LoadObedy();
             LoadGraphs();
+            GetNejcastejsiJidla();
         }
 
         private bool CanNacistDefaultniData(object obj)
@@ -105,12 +138,10 @@ namespace StatistikaCasoveRady.ViewModel
             dlg.Filter = "Excel Files|*.xlsx;";
 
             bool? result = dlg.ShowDialog();
-
+            Obedy.Clear();
             if (result == true)
             {
-                // Open document 
                 string filename = dlg.FileName;
-                Obedy.Clear();
                 List<Obed> obedy = _obedService.NactiVlastniObedy(filename);
                 foreach (var obed in obedy)
                 {
@@ -122,6 +153,7 @@ namespace StatistikaCasoveRady.ViewModel
                 }
                 ObedyList.Clear();
                 LoadGraphs();
+                GetNejcastejsiJidla();
             }
         }
 
@@ -168,13 +200,11 @@ namespace StatistikaCasoveRady.ViewModel
             {
                 new ColumnSeries
                 {
-                    Title = "2015",
+                    Title = "Dostupné roky",
                     Values = PocetVsechObeduVMesici
                 }
             };
 
-
-            Labels = new[] { "Leden", "Unor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec" };
             Formatter = value => value.ToString("N");
         }
 
@@ -216,6 +246,18 @@ namespace StatistikaCasoveRady.ViewModel
 
         private string UpravObed(Obed obed)
         {
+
+            if (obed.Popis == "Pepsi plech 0,33 l")
+                return "Nápoj";
+
+            if (obed.Popis == "Voda neochucená 0,5 l")
+                return "Nápoj";
+
+            if (obed.Popis == "Pokuta hotovostní platba")
+                return "Pokuta";
+            if (obed.Popis == "Pokuta hotovostní platba (částečně)")
+                return "Pokuta";
+
             if (obed.Cena > 99 || obed.Cena < 0)
             {
                 return null;
@@ -226,6 +268,8 @@ namespace StatistikaCasoveRady.ViewModel
             }
             else if (obed.Cena < 16 && obed.Cena > 9)
             {
+                if (obed.Popis == "Pepsi plech 0,33 l")
+                    return "Nápoj";
                 return "Polevka";
             }
             else if (obed.Cena < 10 && obed.Cena > 3)
@@ -240,12 +284,21 @@ namespace StatistikaCasoveRady.ViewModel
             return null;
         }
 
+        private void GetNejcastejsiJidla()
+        {
+            NejPolevka = ObedyList.GroupBy(item => item.Popis).OrderByDescending(g => g.Count(x => x.Druh == "Polevka")).Select(g => g.Key).First();
+            NejHlavniJidlo = ObedyList.GroupBy(item => item.Popis).OrderByDescending(g => g.Count(x => x.Druh == "HlavniJidlo")).Select(g => g.Key).First();
+            NejSalat = ObedyList.GroupBy(item => item.Popis).OrderByDescending(g => g.Count(x => x.Druh == "Salat")).Select(g => g.Key).First();
+        }
+
         private readonly IObedService _obedService;
         private List<Obed> _obedyList;
         private SeriesCollection _seriesCollectionLineChart;
         private ChartValues<double> _pocetVsechObeduVMesici;
         private SeriesCollection _seriesCollection;
         private GraphsBasicLineChart _grafLine;
-
+        private string _nejPolevka;
+        private string _nejHlavniJidlo;
+        private string _nejSalat;
     }
 }
