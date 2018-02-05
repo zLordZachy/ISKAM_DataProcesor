@@ -1,18 +1,15 @@
-﻿using LiveCharts;
-using StatistikaCasoveRady.WindowModel;
-using System.Windows;
+﻿using System.Windows;
 
 namespace StatistikaCasoveRady.WindowView
 {
     /// <summary>
     /// Interaction logic for GraphWindow.xaml
     /// </summary>
-    public partial class GraphWindow : Window
+    public partial class oprogramuWindow : Window
     {
-        public GraphWindow(ChartValues<double> values)
+        public oprogramuWindow()
         {
             InitializeComponent();
-            DataContext = new GraphWindowModel(values);
         }
     }
 }

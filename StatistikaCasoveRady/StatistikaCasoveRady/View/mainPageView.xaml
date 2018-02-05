@@ -8,7 +8,6 @@
       d:DesignHeight="900" d:DesignWidth="800"
       Background="#E9E9E9"
       Title="mainPageView">
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
@@ -21,10 +20,10 @@
                 <Menu>
                     <MenuItem Header="Možnosti">
                         <MenuItem Header="Nacist data">
-                        <MenuItem Header="Víchozí data" Command="{Binding NacistDefaultniDataCommand}"/>
+                        <MenuItem Header="Výchozí data" Command="{Binding NacistDefaultniDataCommand}"/>
                         <MenuItem Header="Vlastni data" Command="{Binding NacistValstniDataCommand}"/>
                     </MenuItem>
-                        <MenuItem Header="O programu"/>
+                    <MenuItem Header="O programu" Command="{Binding OprogramuCommand}" />
                     </MenuItem>
                 </Menu>
         </Grid>
@@ -40,8 +39,8 @@
                           SelectionMode="Extended" CanUserAddRows="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding Obedy}">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="2*" Header="Datum" Binding="{Binding Datum, StringFormat='{}{0:dd/MM/yyyy}'}"/>
-                <DataGridTextColumn Width="*" Header="Cas" Binding="{Binding Cas, StringFormat='{}{0:H:mm}'}" />
-                <DataGridTextColumn Width="*" Header="Zuctovano" Binding="{Binding Zuctovano}"/>
+                <DataGridTextColumn Width="*" Header="Čas" Binding="{Binding Cas, StringFormat='{}{0:H:mm}'}" />
+                <DataGridTextColumn Width="*" Header="Zučtovano" Binding="{Binding Zuctovano}"/>
                 <DataGridTextColumn Width="5*" Header="Popis" Binding="{Binding Popis}"/>
                 <DataGridTextColumn Width="*" Header="Cena" Binding="{Binding Cena}"/>
                 <DataGridTextColumn Width="*" Header="Druh" Binding="{Binding Druh}"/> 
@@ -111,16 +110,12 @@
                         <DataGrid Margin="10" Grid.Row="0" x:Name="TabulkaObedu" Grid.Column="0" AutoGenerateColumns="False" SelectionUnit="FullRow" 
                               SelectionMode="Extended" CanUserAddRows="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding OcisteneObedy}">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="*" Header="Mesic" Binding="{Binding Mesic}"/>
-                                <DataGridTextColumn Width="*" Header="Pocet dní měsíce" Binding="{Binding PocetDni}" />
+                                <DataGridTextColumn Width="*" Header="Měsíc" Binding="{Binding Mesic}"/>
+                                <DataGridTextColumn Width="*" Header="Počet dní měsíce" Binding="{Binding PocetDni}" />
                                 <DataGridTextColumn Width="*" Header="Počet obědů" Binding="{Binding PocetObedu}"/>
-                                <DataGridTextColumn Width="*" Header="Popis očistěných obědů" Binding="{Binding PocetOcistenychObedu}"/>
+                                <DataGridTextColumn Width="*" Header="Počet očistěných obědů" Binding="{Binding PocetOcistenychObedu}"/>
                             </DataGrid.Columns>
                         </DataGrid>
-
-                        <GroupItem  >
-                            <Button Content="Napln" Command="{Binding ButtonClickCommand}"></Button>
-                        </GroupItem>
                     </StackPanel>
                 </GroupBox>
             </Grid>

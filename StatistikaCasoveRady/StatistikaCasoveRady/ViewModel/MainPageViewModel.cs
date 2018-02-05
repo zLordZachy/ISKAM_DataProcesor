@@ -10,6 +10,7 @@ using LiveCharts.Wpf;
 using StatistikaCasoveRady.Graphs;
 using System.ComponentModel;
 using StatistikaCasoveRady.DTO;
+using System.Windows;
 
 namespace StatistikaCasoveRady.ViewModel
 {
@@ -102,7 +103,7 @@ namespace StatistikaCasoveRady.ViewModel
             }
         }
 
-        public ICommand ButtonClickCommand { get; }
+        public ICommand OprogramuCommand { get; }
         public ICommand NacistValstniDataCommand { get; }
         public ICommand NacistDefaultniDataCommand { get; }
 
@@ -142,7 +143,7 @@ namespace StatistikaCasoveRady.ViewModel
             OcisteneObedy = new ObservableCollection<DTO.OcisteneObedy>();
             NacistValstniDataCommand = new ZCommand(CanNacistVlastniData, NacistVlastniData);
             NacistDefaultniDataCommand = new ZCommand(CanNacistDefaultniData, NacistDefaultniData);
-            ButtonClickCommand = new ZCommand(CanOpenWindow, OpenWindow);
+            OprogramuCommand = new ZCommand(CanOpenoProgramu, OpenOProgramu);
             try
             {
                 LoadObedy();
@@ -151,15 +152,22 @@ namespace StatistikaCasoveRady.ViewModel
             }
             catch (Exception)
             {
-
+                MessageBox.Show("Data nemohou být načtena, program nenalezl složku data se vstupními daty.", "Chyba v načtení dat", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void NacistDefaultniData(object obj)
         {
+            try
+            {
             LoadObedy();
             LoadGraphs();
             ActualizeInfoFiles();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Data nemohou být načtena, program nenalezl složku data se vstupními daty.", "Chyba v načtení dat", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private bool CanNacistDefaultniData(object obj)
@@ -245,16 +253,15 @@ namespace StatistikaCasoveRady.ViewModel
             Formatter = value => value.ToString("N");
         }
 
-        private bool CanOpenWindow(object parametr)
+        private bool CanOpenoProgramu(object parametr)
         {
             return true;
         }
 
-        private void OpenWindow(object parametr)
+        private void OpenOProgramu(object parametr)
         {
-            LoadValuesPerYear();
-            GraphWindow win = new GraphWindow(PocetVsechObeduVMesici);
-            win.Show();
+            oprogramuWindow newWindow = new oprogramuWindow();
+            newWindow.Show();
         }
 
         private void LoadValuesPerYear()
